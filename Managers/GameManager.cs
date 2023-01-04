@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         _speaker.PlayJazz();
     }
     private void ResetGame() {
-        SceneLoader.StartGame();
+        SceneLoader.Restart();
     }
     private void CeilingDropCheck() {
         if (_shootCounter >= _sceneConfig.TTL) {

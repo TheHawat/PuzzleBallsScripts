@@ -6,9 +6,9 @@ public class SceneLoader : MonoBehaviour
 {
     public float FADE_TIME = 0.3f;
     public GameObject loadingScreen;
-    public string sceneToLoad;
     public CanvasGroup canvasGroup;
     private static GameObject instance;
+    private string CurrentScene = "Main Menu";
     public void Start() {
         DontDestroyOnLoad(gameObject);
         if (instance == null)
@@ -16,18 +16,25 @@ public class SceneLoader : MonoBehaviour
         else
             Destroy(gameObject);
     }
-    public void StartGame() {
-        StartCoroutine(StartLoad());
+    public void Restart() {
+        StartCoroutine(StartLoad(CurrentScene));
     }
-    IEnumerator StartLoad() {
+    public void StartEndless() {
+        StartCoroutine(StartLoad("SampleScene"));
+    }
+    public void GoToMainMenu() {
+        StartCoroutine(StartLoad("Main Menu"));
+    }
+    IEnumerator StartLoad(string sceneName) {
         loadingScreen.SetActive(true);
         yield return StartCoroutine(FadeLoadingScreen(1.0f, FADE_TIME));
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneToLoad);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while (!operation.isDone) {
             yield return null;
         }
         yield return StartCoroutine(FadeLoadingScreen(0.0f, FADE_TIME));
         loadingScreen.SetActive(false);
+        CurrentScene = sceneName;
     }
     IEnumerator FadeLoadingScreen(float targetValue, float duration) {
         float startValue = canvasGroup.alpha;
